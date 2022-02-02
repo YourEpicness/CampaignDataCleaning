@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 class DataCleaner:
     global disp
@@ -47,15 +48,6 @@ class DataCleaner:
         chq = dict(zip(self.disp[self.disp.columns[0]], self.disp[self.disp.columns[1]]))
         return value if value not in chq else chq[value]
 
-
-    # def convert_disposition_codes(self, value):
-    #     """
-    #     Uses the disposition codes and converts each key in a data frame 
-    #     column to the proper value
-    #     """
-    #     disposition = self.__convert_disposition(self.dispos_data)
-    #     return value if value not in disposition else disposition[value]
-
     def convert_q1_codes(self, value):
         """
         Uses the question codes and converts each key in a data frame 
@@ -79,7 +71,7 @@ class DataCleaner:
         self.data['Congressional District'] = self.data['Congressional District'].fillna(1).astype(int)
         self.data['Call Date'] = pd.to_datetime(self.data['Call Date']).dt.strftime('%m/%d/%Y')
         self.data['Disposition'] = self.data['Disposition'].astype('str')
-        self.data['Q1'] = self.data['Q1'].fillna('Undecided').astype('str')
+        self.data['Q1'] = self.data['Q1'].fillna(np.nan).replace([np.nan], [None]).astype('str')
 
     def clean_disposition_column(self):
         # Convert the data in dispositions column
